@@ -279,10 +279,10 @@ void loop() {
       lcd.setCursor(0, 1);
       // if distance is greater than 1000 cm, display in meters
         if (totalDistance > 1000) {
-            lcd.print(String((totalDistance / 100)) + " meters");
+            lcd.print(String((totalDistance / 100)) + " meters    ");
         } else {
             // only show integers
-            lcd.print(String((int)totalDistance) + " cm");
+            lcd.print(String("Distance: "(int)totalDistance) + "cm");
             }
     }
   }
