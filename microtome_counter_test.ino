@@ -18,6 +18,7 @@ void loop(){
   distance = duration / 58.2;
   String disp = String(distance);
 
+  Serial.print(duration);
   Serial.print("Distance: ");
   Serial.print(disp);
   Serial.println(" cm");
