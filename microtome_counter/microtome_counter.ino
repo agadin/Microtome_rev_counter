@@ -130,12 +130,16 @@ void loop() {
     if (passCount % messageInterval == 0 && millis() - lastMessageTime > messageDuration) {
       showingMessage = true; // Set flag to show message
       lastMessageTime = millis(); // Reset message display time
-      lcd.setCursor(0, 1);
+      lcd.setCursor(0, 1); // Set to the second line of the LCD
       lcd.print(messages[random(0, 5)]);
     }
   }
 
-  // Handle the LCD display
+  // Always show the pass count on the top line
+  lcd.setCursor(0, 0);
+  lcd.print("Passes: " + String(passCount));
+
+  // Handle the bottom line display
   if (showingMessage) {
     // Keep showing the message for 5 seconds
     if (millis() - lastMessageTime >= messageDuration) {
