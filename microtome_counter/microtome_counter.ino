@@ -280,9 +280,9 @@ void loop() {
     }
   } else {
     // Cycle between showing total distance and speed when not showing a message
-    if (millis() % 2000 < 1000) {
+    if (millis() % 4000 < 2000) {
         lcd.setCursor(0, 1);
-        String speedStr = "Speed: " + String(speed) + " cm/s";
+        String speedStr = "Speed: " + String((int)speed) + " cm/s";
         if (speedStr.length() > 16) {
             speedStr = speedStr.substring(0, 16); // Truncate if too long
         } else {
