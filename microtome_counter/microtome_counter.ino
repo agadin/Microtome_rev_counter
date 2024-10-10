@@ -29,14 +29,141 @@ float movingAverageSpeed = 0; // Moving average of the speed
 // LCD setup
 LCD_I2C lcd(0x27, 16, 2); // Initialize the LCD with I2C address 0x27 and size 16x2
 
-// Motivational messages
+// Motivational messages- have to be 16 characters long
 const char* messages[] = {
-  "Keep going!",
-  "You're doing great!",
-  "Almost there!",
-  "Stay strong!",
-  "You can do it!"
+  "Keep going!     ",
+  "Great job!      ",
+  "Almost there!   ",
+  "Stay strong!    ",
+  "You can do it!  ",
+  "Don't give up!  ",
+  "Keep pushing!   ",
+  "You're amazing! ",
+  "You got this!   ",
+  "Keep it up!     ",
+  "Stay focused!   ",
+  "You're a star!  ",
+  "You're a champ! ",
+  "You're a hero!  ",
+  "You're a legend!",
+  "You're a winner!",
+  "Keep hustling!  ",
+  "Onwards!        ",
+  "Believe it!     ", // Naruto reference
+  "To infinity!    ", // Toy Story reference
+  "Stay frosty!    ", // Call of Duty reference
+  "The Force is w/ ", // Star Wars reference
+  "Smash that goal! ",
+  "Wakanda forever!", // Black Panther reference
+  "Go Super Saiyan!", // Dragon Ball Z reference
+  "Never tell odds ", // Star Wars Han Solo ref
+  "Make it so!     ", // Star Trek ref
+  "Power up!       ", // General video game ref
+  "Suit up!        ", // Barney from HIMYM
+  "Eyes on prize!  ",
+  "Just one more!  ",
+  "You're the GOAT! ",
+  "Boom! Headshot! ", // FPS gaming ref
+  "Channel Hulk!   ", // Avengers ref
+  "You're a wizard!", // Harry Potter ref
+  "You're a ninja! ", // Naruto ref
+  "You're a pirate!", // One Piece
+  "Seize the day!  ",
+  "Be unstoppable! ",
+  "Rise and shine! ",
+  "Level up!       ",
+  "Game on!        ",
+  "Rock on!        ",
+  "Feel the power! ",
+  "One step closer!",
+  "Let's roll!     ",
+  "Just keep swim! ", // Finding Nemo ref
+  "Keep moving!    ",
+  "You're unstoppable!",
+  "Be the change!  ",
+  "Keep the faith! ",
+  "Believe in you! ",
+  "Push through!   ",
+  "Go beyond!      ", // My Hero Academia ref
+  "You are Iron Man", // Iron Man ref
+  "Hero in making! ",
+  "Chase your fire!",
+  "Never back down!",
+  "Run with wolves!",
+  "Stay in control!",
+  "Be your best!   ",
+  "You're in beast!",
+  "Claim your crown",
+  "Grit and grind! ",
+  "The way's open! ",
+  "Do or do not!   ", // Star Wars Yoda ref
+  "Hold the line!  ",
+  "Full throttle!  ",
+  "All in!         ",
+  "Forward march!  ",
+  "Eye of tiger!   ", // Rocky ref
+  "Maximum effort! ", // Deadpool ref
+  "Born to rise!   ",
+  "No limits!      ",
+  "Dig deep!       ",
+  "Up, up, away!   ", // Superman ref
+  "To the moon!    ",
+  "Epic win ahead! ",
+  "Keep the hustle!",
+  "Untouchable!    ",
+  "Power through!  ",
+  "Bright future!  ",
+  "Make it happen! ",
+  "Catch the wave! ",
+  "You’re shining! ",
+  "Victory is near!",
+  "Let’s get loud! ",
+  "Charge forward! ",
+  "Rise, Jedi!     ", // Star Wars ref
+  "I am Groot!     ", // Guardians of Galaxy
+  "Lock and load!  ",
+  "Wow, so hard!   ",
+  "Keep slacking!  ",
+  "Nailed it!      ",
+  "That was easy!  ",
+  "Try harder...   ",
+  "Yup, nailed it! ",
+  "Oh, impressive. ",
+  "Such effort!    ",
+  "Really though?  ",
+  "Keep 'winning'! ",
+  "Well, almost... ",
+  "Bravo, champ... ",
+  "Gold star...not!",
+  "You tried???????",
+  "This is fine.   ",
+  "Wow, so close!  ",
+  "A for effort... ",
+  "Keep dreaming!  ",
+  "Sure, why not!  ",
+  "Such wow! Much. ",
+  "Zero chill!     ",
+  "Don’t trip!     ",
+  "Let’s taco 'bout!",
+  "You're on fire! ",
+  "Avoid humans!   ",
+  "Run like Wi-Fi! ",
+  "Stay weird!     ",
+  "Adulting...lol! ",
+  "May the snacks! ",
+  "Brace yourself! ",
+  "Ctrl+Alt+Win!   ",
+  "Nap later!      ",
+  "Pizza's waiting!",
+  "You got this... ?",
+  "Send coffee!    ",
+  "Slay all day!   "
 };
+
+
+
+};
+
 int messageInterval = 10; // Interval for displaying messages (in cycles)
 const int messageDuration = 5000; // Display message for 5 seconds
 unsigned long lastMessageTime = 0; // Last time a message was displayed
@@ -52,7 +179,6 @@ void setup() {
   lcd.display();
   lcd.backlight();
   lcd.setCursor(0, 0);
-  lcd.print("Microtome Counter");
 
   // Initialize the sensor pins
   pinMode(trigPin, OUTPUT);
@@ -73,7 +199,8 @@ void loop() {
   digitalWrite(trigPin, LOW); // Set the trigger pin low
   duration = pulseIn(echoPin, HIGH); // Read the echo pin and get the duration of the pulse
   distance = duration * 0.034 / 2; // Calculate the distance in cm
-
+  // scale distance down by 0.9600 to account for the difference in the sensor's distance reading
+    distance = distance * 0.9600;
   // Track local minimum (closest) and maximum (farthest) distance in a cycle
   if (distance < minDistance) {
     minDistance = distance; // Update minimum if current distance is closer
@@ -131,7 +258,8 @@ void loop() {
       showingMessage = true; // Set flag to show message
       lastMessageTime = millis(); // Reset message display time
       lcd.setCursor(0, 1); // Set to the second line of the LCD
-      lcd.print(messages[random(0, 5)]);
+      lcd.print(messages[random(0, sizeof(messages) / sizeof(messages[0]))]); // Display a random message
+      messageInterval = random(20, 51); // Randomize the interval for next message
     }
   }
 
@@ -152,7 +280,11 @@ void loop() {
       lcd.print("Speed: " + String(speed) + " cm/s");
     } else {
       lcd.setCursor(0, 1);
-      lcd.print("Distance: " + String(totalDistance) + " cm");
+      // if distance is greater than 1000 cm, display in meters
+        if (totalDistance > 1000) {
+            lcd.print("Distance: " + String(totalDistance / 100) + " m");
+        } else {
+            lcd.print("Distance: " + String(totalDistance) + " cm");
     }
   }
 
