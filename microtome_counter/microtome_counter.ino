@@ -1,4 +1,5 @@
-#include <LiquidCrystal_I2C.h>
+#include <LCD-I2C.h>
+#include <Wire.h>
 
 // Pin definitions
 const int trigPin = 9; // Trigger pin for the HC-SR04 sensor
@@ -23,7 +24,7 @@ int bufferIndex = 0; // Current index in the buffer
 float movingAverageSpeed = 0; // Moving average of the speed
 
 // LCD setup
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Initialize the LCD with I2C address 0x27 and size 16x2
+LCD_I2C lcd(0x27, 16, 2); // Initialize the LCD with I2C address 0x27 and size 16x2
 
 // Motivational messages
 const char* messages[] = {
@@ -42,7 +43,9 @@ void setup() {
   Serial.begin(9600);
 
   // Initialize the LCD
-  lcd.init();
+  Wire.begin();
+  lcd.begin(&Wire);
+  lcd.display();
   lcd.backlight();
   lcd.setCursor(0, 0);
   lcd.print("Microtome Counter");
