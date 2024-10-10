@@ -222,7 +222,7 @@ void loop() {
     float timeElapsed = (endTime - startTime) / 1000.0; // Convert ms to seconds
     speed = travelDistance / timeElapsed;
 
-    totalDistance += travelDistance; // Add this cycle's travel distance to total
+    totalDistance += travelDistance*2; // Add this cycle's travel distance to total
 
     // Update the speed buffer for moving average
     speedBuffer[bufferIndex] = speed;
@@ -279,9 +279,10 @@ void loop() {
       lcd.setCursor(0, 1);
       // if distance is greater than 1000 cm, display in meters
         if (totalDistance > 1000) {
-            lcd.print("Distance: " + String(totalDistance / 100) + " m");
+            lcd.print(String((totalDistance / 100)) + " meters");
         } else {
-            lcd.print("Distance: " + String(totalDistance) + " cm");
+            // only show integers
+            lcd.print(String((int)totalDistance) + " cm");
             }
     }
   }
