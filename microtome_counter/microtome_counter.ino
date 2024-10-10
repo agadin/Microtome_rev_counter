@@ -274,15 +274,21 @@ void loop() {
     // Cycle between showing total distance and speed when not showing a message
     if (millis() % 2000 < 1000) {
       lcd.setCursor(0, 1);
-      lcd.print("Speed: " + String(speed) + " cm/s");
+      String speedStr = "Speed: " + String(speed) + " cm/s";
+      if (speedStr.length() > 16) {
+          speedStr = speedStr.substring(0, 16); // Truncate if too long
+      } else {
+          speedStr += String(" ").repeat(16 - speedStr.length()); // Pad with spaces if too short
+      }
+      lcd.print(speedStr);
     } else {
       lcd.setCursor(0, 1);
       // if distance is greater than 1000 cm, display in meters
         if (totalDistance > 1000) {
-            lcd.print(String((totalDistance / 100)) + " meters    ");
+            lcd.print(String((totalDistance / 100)) + " meters" + String(" ").repeat(16 - String((totalDistance / 100)).length() - 7));
         } else {
             // only show integers
-            lcd.print(String("Distance: "(int)totalDistance) + "cm");
+            lcd.print(String("Distance: "(int)totalDistance) + " cm ");
             }
     }
   }
