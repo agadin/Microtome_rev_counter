@@ -38,8 +38,9 @@ const char* messages[] = {
   "You can do it!"
 };
 int messageInterval = 10; // Interval for displaying messages (in cycles)
-const int messageDuration = 20000; // Duration for displaying messages (in milliseconds)
+const int messageDuration = 5000; // Display message for 5 seconds
 unsigned long lastMessageTime = 0; // Last time a message was displayed
+boolean showingMessage = false; // Flag to track if message is currently being shown
 
 void setup() {
   // Initialize serial communication
@@ -125,30 +126,30 @@ void loop() {
     Serial.print(totalDistance);
     Serial.println(" cm");
 
-    // Display on LCD
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Passes: " + String(passCount));
-
-    // Check for motivational message
+    // Check if it's time to display a motivational message
     if (passCount % messageInterval == 0 && millis() - lastMessageTime > messageDuration) {
-      lcd.clear();
-      lcd.setCursor(0, 0);
+      showingMessage = true; // Set flag to show message
+      lastMessageTime = millis(); // Reset message display time
+      lcd.setCursor(0, 1);
       lcd.print(messages[random(0, 5)]);
-      lastMessageTime = millis();
-      delay(messageDuration);
-      lcd.clear();
-      messageInterval = random(10, 51); // Set a new random interval between 10 and 50
     }
   }
 
-  // Cycle between showing total distance and velocity
-  if (millis() % 2000 < 1000) {
-    lcd.setCursor(0, 1);
-    lcd.print("Speed: " + String(speed) + " cm/s");
+  // Handle the LCD display
+  if (showingMessage) {
+    // Keep showing the message for 5 seconds
+    if (millis() - lastMessageTime >= messageDuration) {
+      showingMessage = false; // Stop showing the message after 5 seconds
+    }
   } else {
-    lcd.setCursor(0, 1);
-    lcd.print("Distance: " + String(totalDistance) + " cm");
+    // Cycle between showing total distance and speed when not showing a message
+    if (millis() % 2000 < 1000) {
+      lcd.setCursor(0, 1);
+      lcd.print("Speed: " + String(speed) + " cm/s");
+    } else {
+      lcd.setCursor(0, 1);
+      lcd.print("Distance: " + String(totalDistance) + " cm");
+    }
   }
 
   delay(100); // Wait for 100 milliseconds before the next loop
