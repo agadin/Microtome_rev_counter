@@ -2,16 +2,19 @@
 #include <Wire.h>
 
 // Pin definitions
-const int trigPin = 9; // Trigger pin for the HC-SR04 sensor
-const int echoPin = 10; // Echo pin for the HC-SR04 sensor
+const int trigPin = 4; // Trigger pin for the HC-SR04 sensor
+const int echoPin = 2; // Echo pin for the HC-SR04 sensor
 
 // Variables for distance measurement
 long duration; // Duration of the pulse
 int distance; // Calculated distance
+int minDistance = 1000; // Initialize with a high value for finding local minimum
+int maxDistance = 0; // Initialize with 0 for finding local maximum
 
 // Variables for counting passes
 int passCount = 0; // Number of blade passes
 boolean bladeClose = false; // Flag to check if the blade is close to the sensor
+boolean bladeFar = false; // Flag to check if the blade moved far
 unsigned long startTime; // Start time of the blade pass
 unsigned long endTime; // End time of the blade pass
 float speed; // Speed of the blade
@@ -70,18 +73,33 @@ void loop() {
   duration = pulseIn(echoPin, HIGH); // Read the echo pin and get the duration of the pulse
   distance = duration * 0.034 / 2; // Calculate the distance in cm
 
-  // Check for blade pass
-  if (distance <= 15 && !bladeClose) { // If the blade is close and was not previously close
-    bladeClose = true; // Set the bladeClose flag to true
-    startTime = millis(); // Record the start time
-  } else if (distance >= 20 && bladeClose) { // If the blade is far and was previously close
-    bladeClose = false; // Set the bladeClose flag to false
-    endTime = millis(); // Record the end time
-    passCount++; // Increment the pass count
-    speed = (20.0 - 15.0) / ((endTime - startTime) / 1000.0); // Calculate the speed in cm/s
-    totalDistance += 5.0; // Increment the total distance by 5 cm (distance between 20 cm and 15 cm)
+  // Track local minimum (closest) and maximum (farthest) distance in a cycle
+  if (distance < minDistance) {
+    minDistance = distance; // Update minimum if current distance is closer
+  }
+  if (distance > maxDistance) {
+    maxDistance = distance; // Update maximum if current distance is farther
+  }
 
-    // Update the speed buffer
+  // Check if the blade is close (within 15 cm) and detect when it moves away (above 20 cm)
+  if (distance <= 15 && !bladeClose) { // Blade is close, start tracking
+    bladeClose = true;
+    minDistance = distance; // Reset min distance for this cycle
+    startTime = millis(); // Record start time
+  } else if (distance >= 20 && bladeClose) { // Blade moves far, end tracking
+    bladeClose = false;
+    bladeFar = true;
+    maxDistance = distance; // Record the maximum distance the blade moved away
+    endTime = millis(); // Record end time
+
+    // Calculate speed (maxDistance - minDistance) / time
+    float travelDistance = maxDistance - minDistance;
+    float timeElapsed = (endTime - startTime) / 1000.0; // Convert ms to seconds
+    speed = travelDistance / timeElapsed;
+
+    totalDistance += travelDistance; // Add this cycle's travel distance to total
+
+    // Update the speed buffer for moving average
     speedBuffer[bufferIndex] = speed;
     bufferIndex = (bufferIndex + 1) % bufferSize;
 
@@ -91,6 +109,8 @@ void loop() {
       sum += speedBuffer[i];
     }
     movingAverageSpeed = sum / bufferSize;
+
+    passCount++; // Increment pass count
 
     // Display on serial monitor
     Serial.print("Pass Count: ");
@@ -110,7 +130,7 @@ void loop() {
     lcd.setCursor(0, 0);
     lcd.print("Passes: " + String(passCount));
 
-    // Check if it's time to display a motivational message
+    // Check for motivational message
     if (passCount % messageInterval == 0 && millis() - lastMessageTime > messageDuration) {
       lcd.clear();
       lcd.setCursor(0, 0);
