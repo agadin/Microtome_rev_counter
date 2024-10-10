@@ -166,6 +166,14 @@ const int messageDuration = 5000; // Display message for 5 seconds
 unsigned long lastMessageTime = 0; // Last time a message was displayed
 boolean showingMessage = false; // Flag to track if message is currently being shown
 
+String repeatChar(char c, int count) {
+  String result = "";
+  for (int i = 0; i < count; i++) {
+    result += c;
+  }
+  return result;
+}
+
 void setup() {
   // Initialize serial communication
   Serial.begin(9600);
@@ -273,23 +281,22 @@ void loop() {
   } else {
     // Cycle between showing total distance and speed when not showing a message
     if (millis() % 2000 < 1000) {
-      lcd.setCursor(0, 1);
-      String speedStr = "Speed: " + String(speed) + " cm/s";
-      if (speedStr.length() > 16) {
-          speedStr = speedStr.substring(0, 16); // Truncate if too long
-      } else {
-          speedStr += String(" ").repeat(16 - speedStr.length()); // Pad with spaces if too short
-      }
-      lcd.print(speedStr);
-    } else {
-      lcd.setCursor(0, 1);
-      // if distance is greater than 1000 cm, display in meters
-        if (totalDistance > 1000) {
-            lcd.print(String((totalDistance / 100)) + " meters" + String(" ").repeat(16 - String((totalDistance / 100)).length() - 7));
+        lcd.setCursor(0, 1);
+        String speedStr = "Speed: " + String(speed) + " cm/s";
+        if (speedStr.length() > 16) {
+            speedStr = speedStr.substring(0, 16); // Truncate if too long
         } else {
-            // only show integers
-            lcd.print(String("Distance: "(int)totalDistance) + " cm ");
-            }
+            speedStr += repeatChar(' ', 16 - speedStr.length()); // Pad with spaces if too short
+        }
+        lcd.print(speedStr);
+    } else {
+        lcd.setCursor(0, 1);
+        // Updated code for displaying total distance
+        if (totalDistance > 1000) {
+            lcd.print(String((totalDistance / 100)) + " meters" + repeatChar(' ', 16 - String((totalDistance / 100)).length() - 7));
+        } else {
+            lcd.print("Distance: " + String((int)totalDistance) + " cm" + repeatChar(' ', 16 - String("Distance: " + String((int)totalDistance) + " cm").length()));
+        }
     }
   }
 
