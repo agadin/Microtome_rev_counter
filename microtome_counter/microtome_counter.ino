@@ -115,9 +115,9 @@ const char* messages[] = {
   "Bright future!  ",
   "Make it happen! ",
   "Catch the wave! ",
-  "You’re shining! ",
+  "You're shining! ",
   "Victory is near!",
-  "Let’s get loud! ",
+  "Let's get loud! ",
   "Charge forward! ",
   "Rise, Jedi!     ", // Star Wars ref
   "I am Groot!     ", // Guardians of Galaxy
@@ -143,8 +143,8 @@ const char* messages[] = {
   "Sure, why not!  ",
   "Such wow! Much. ",
   "Zero chill!     ",
-  "Don’t trip!     ",
-  "Let’s taco 'bout!",
+  "Don't trip!     ",
+  "Let's taco 'bout!",
   "You're on fire! ",
   "Avoid humans!   ",
   "Run like Wi-Fi! ",
@@ -160,9 +160,6 @@ const char* messages[] = {
   "Slay all day!   "
 };
 
-
-
-};
 
 int messageInterval = 10; // Interval for displaying messages (in cycles)
 const int messageDuration = 5000; // Display message for 5 seconds
@@ -285,6 +282,7 @@ void loop() {
             lcd.print("Distance: " + String(totalDistance / 100) + " m");
         } else {
             lcd.print("Distance: " + String(totalDistance) + " cm");
+            }
     }
   }
 
