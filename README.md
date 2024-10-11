@@ -1,4 +1,5 @@
 # Overview
+![LCD Screen](https://raw.githubusercontent.com/agadin/Microtome_rev_counter/refs/heads/main/img/microtome_counter_screen.gif)
 This project uses an HC-SR04 ultrasonic sensor to count the number of times a microtome blade passes by and calculates the speed of the blade. The results are displayed on both the serial monitor and an LCD screen.
 
 * [Introduction](#introduction)
@@ -14,6 +15,18 @@ The microtome is a device used to cut thin slices of material, typically for mic
 
 `microtome_speed.ino` is the main file that contains the code for the project. The code is written in C++ and is designed to be run on an ESP32 or arduino capable device. The code reads the distance from the ultrasonic sensor and calculates the speed of the blade based on the time between each pass. The results are displayed on both the serial monitor and an LCD screen.
 
+## Features
+* **Distance Measurement:** Uses an HC-SR04 ultrasonic sensor to measure the distance of the microtome blade. 
+* **Speed Calculation:** Calculates the speed of the blade based on the time between passes. 
+* **Pass Counting:** Counts the number of times the blade passes by the sensor. 
+* **Total Distance Tracking:** Tracks the total distance traveled by the blade.
+
+* **CD Display:** Displays the pass count, speed, and total distance on an LCD screen. 
+* **Motivational Messages:** Displays random motivational messages after a certain number of passes. 
+* **Reset Button:** Allows users to reset the pass count and total distance. 
+* **Celebration Mode:** A fun mode that displays a congratulatory message when a button is pressed.
+
+
 # Installation
 **To run this project, you will need the following hardware:**
 * ESP32 Wroom
@@ -24,18 +37,24 @@ The microtome is a device used to cut thin slices of material, typically for mic
 * [LCD-I2C](https://github.com/hasenradball/LCD-I2C)
 
 ## Circuit Diagram
-![Circuit Diagram](
+![Circuit Diagram](https://raw.githubusercontent.com/agadin/Microtome_rev_counter/refs/heads/main/img/circuit_diagram.png)
+
 **HC-SR04 Ultrasonic Sensor:**  
 * VCC to 5V 
 * GND to GND 
-* Trig to digital pin 9 
-* Echo to digital pin 10
+* Trig to digital pin D4 
+* Echo to digital pin D2
 
 **LCD Screen:**  
 * Connect the LCD screen to the I2C pins on the D1_mini (SDA and SCL).
 * VCC to 5V
 * GND to GND
 
+**Buttons:**
+* Button 1: D5
+* Button 2: D6
+
+Note: The buttons are optional and can be used to reset the pass count and total distance or to enter celebration mode. These are connected to a digital in and ground (GND) on the ESP32.
 
 **To install the code onto your ESP32, follow these steps:**
 1. Clone the repository
@@ -46,16 +65,14 @@ The microtome is a device used to cut thin slices of material, typically for mic
 6. Upload the code to the ESP32 by clicking the upload button in the Arduino IDE
 7. Open the serial monitor to view the results and ensure the LCD screen is displaying the results as well.
 
-
-
-
 # Usage
-To use this project, connect the hardware as shown in the circuit diagram section above. Upload the code to the D1_mini by using the Arduino IDE (or another of your choice) and open the serial monitor to view the results. The LCD screen will also display the results.
+To use this project, connect the hardware as shown in the circuit diagram section above. Upload the code to the ESP32 Wroom by using the Arduino IDE (or another of your choice) and open the serial monitor to view the results. The LCD screen will also display the results.
 
 ### Additional Information
-The blade must travel from at least 20 cm away from the sensor to 15 cm or closer to be counted as a pass.
-The speed is calculated based on the time taken for the blade to travel between these two points.
+* The ultrasonic sensor is used to detect the distance between the sensor and the blade. The sensor is placed at the top of the blade's path and measures the distance to the blade as it passes by accessing the periodic nature of the back and forth motion of teh microtome. The speed is calculated based on the time taken for the blade to travel between these two points.
 
+### Changing motivational quotes
+The motivational quotes are stored in the `messages` array in the `microtome_counter.ino` file. You can change the quotes by modifying the strings in this array. These messages are displayed after achieving a random amount of passes by the blade.  
 
 # Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
