@@ -4,6 +4,7 @@
 // Pin definitions
 const int trigPin = 4; // Trigger pin for the HC-SR04 sensor
 const int echoPin = 2; // Echo pin for the HC-SR04 sensor
+const int resetButtonPin = 3; // Pin for the reset button
 
 // Variables for distance measurement
 long duration; // Duration of the pulse
@@ -196,6 +197,22 @@ void setup() {
 }
 
 void loop() {
+  // Check if the reset button is pressed
+  if (digitalRead(resetButtonPin) == LOW) {
+    // Reset all relevant variables
+    passCount = 0;
+    totalDistance = 0;
+    bufferIndex = 0;
+    for (int i = 0; i < bufferSize; i++) {
+      speedBuffer[i] = 0;
+    }
+    movingAverageSpeed = 0;
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Reset done");
+    delay(1000); // Wait for 1 second to show the reset message
+    lcd.clear();
+  }
   // Measure distance
   digitalWrite(trigPin, LOW); // Set the trigger pin low
   delayMicroseconds(2); // Wait for 2 microseconds

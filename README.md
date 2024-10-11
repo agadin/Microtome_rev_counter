@@ -10,22 +10,21 @@ This project uses an HC-SR04 ultrasonic sensor to count the number of times a mi
 * [Acknowledgements](#acknowledgements)
 
 # Introduction
-The microtome is a device used to cut thin slices of material, typically for microscopy. The blade moves up and down, cutting the material as it passes by. Out of curosity, and because our arms hurt from using this machine so much, we wanted to know the total distance and other facts about our microtoming efforts. This project uses an HC-SR04 ultrasonic sensor to count the number of times the blade passes by, the speed, and total distance traveled by the blade.
+The microtome is a device used to cut thin slices of material, typically for microscopy. The blade moves up and down, cutting the material as it passes by. Out of curosity, and because our arms hurt from using this machine so much, we wanted to know the total distance and other facts about our microtoming efforts. This project uses an HC-SR04 ultrasonic sensor to count the number of times the blade passes by, the speed, and total distance traveled by the blade with some motivational quotes along the way.
 
-`microtome_speed.ino` is the main file that contains the code for the project. The code is written in C++ and is designed to be run on an D1_mini. The code reads the distance from the ultrasonic sensor and calculates the speed of the blade based on the time between each pass. The results are displayed on both the serial monitor and an LCD screen.
+`microtome_speed.ino` is the main file that contains the code for the project. The code is written in C++ and is designed to be run on an ESP32 or arduino capable device. The code reads the distance from the ultrasonic sensor and calculates the speed of the blade based on the time between each pass. The results are displayed on both the serial monitor and an LCD screen.
 
 # Installation
-To run this project, you will need the following hardware:
-* D1_mini
+**To run this project, you will need the following hardware:**
+* ESP32 Wroom
 * HC-SR04 ultrasonic sensor
-* 16 char LCD screen connected via i2c
+* 16 char LCD screen connected via i2c (using a HD44780 for example)
 
-You will also need the following libraries:
-* [LiquidCrystal_I2C](https://www.arduino.cc/reference/en/libraries/liquidcrystal-i2c/)
-
-To install the libraries, download the zip files from the links above and extract the contents to your Arduino libraries folder. The libraries can be installed by going to `Sketch > Include Library > Add .ZIP Library` in the Arduino IDE.
+**You will also need the following libraries:**
+* [LCD-I2C](https://github.com/hasenradball/LCD-I2C)
 
 ## Circuit Diagram
+![Circuit Diagram](
 **HC-SR04 Ultrasonic Sensor:**  
 * VCC to 5V 
 * GND to GND 
@@ -34,6 +33,21 @@ To install the libraries, download the zip files from the links above and extrac
 
 **LCD Screen:**  
 * Connect the LCD screen to the I2C pins on the D1_mini (SDA and SCL).
+* VCC to 5V
+* GND to GND
+
+
+**To install the code onto your ESP32, follow these steps:**
+1. Clone the repository
+2. Open the `microtome_counter.ino` file in the Arduino IDE
+3. Install the required libraries (LCD-I2c) using the library tab on the right vertical ribbon
+4. Install the ESP32 board in the Arduino IDE by following the instructions [here](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
+5. Plug in your ESP32 and select the correct port and board from the tools menu (see link above for more details).
+6. Upload the code to the ESP32 by clicking the upload button in the Arduino IDE
+7. Open the serial monitor to view the results and ensure the LCD screen is displaying the results as well.
+
+
+
 
 # Usage
 To use this project, connect the hardware as shown in the circuit diagram section above. Upload the code to the D1_mini by using the Arduino IDE (or another of your choice) and open the serial monitor to view the results. The LCD screen will also display the results.
