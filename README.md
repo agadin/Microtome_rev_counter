@@ -1,5 +1,6 @@
 # Overview
 ![LCD Screen](https://raw.githubusercontent.com/agadin/Microtome_rev_counter/refs/heads/main/img/microtome_counter_screen.gif)
+
 This project uses an HC-SR04 ultrasonic sensor to count the number of times a microtome blade passes by and calculates the speed of the blade. The results are displayed on both the serial monitor and an LCD screen.
 
 * [Introduction](#introduction)
@@ -51,7 +52,7 @@ The microtome is a device used to cut thin slices of material, typically for mic
 * GND to GND
 
 **Buttons:**
-* Button 1: D5
+* Button 1: D15
 * Button 2: D6
 
 Note: The buttons are optional and can be used to reset the pass count and total distance or to enter celebration mode. These are connected to a digital in and ground (GND) on the ESP32.
@@ -68,15 +69,19 @@ Note: The buttons are optional and can be used to reset the pass count and total
 # Usage
 To use this project, connect the hardware as shown in the circuit diagram section above. Upload the code to the ESP32 Wroom by using the Arduino IDE (or another of your choice) and open the serial monitor to view the results. The LCD screen will also display the results.
 
+**NOTE:** The expressions `(distance <= 11 && !bladeClose)` and `(distance >= 16 && bladeClose)` are used to detect the blade passing by the sensor. These values are threshold in which the blade has to be below or exceed to be qualified as a pass by the counter. Change these values to suit your needs.
+
 ### Buttons
 * **Button 1:** Resets the pass count and total distance.
 * **Button 2:** Enters celebration mode and displays a congratulatory message.
 
 ### Optional CAD files
-* The `microtome_counter.stl` file contains a 3D model of the microtome counter. This model can be 3D printed and used to mount the LCD and other components to the microtome.
-* 
+* The `microtome_counter.step` file contains a 3D model of the microtome counter. This model can be 3D printed and used to mount the LCD and other components to the microtome.
+![3D Model](https://raw.githubusercontent.com/agadin/Microtome_rev_counter/refs/heads/main/img/holder_counter1.gif)
+
 ### Additional Information
 * The ultrasonic sensor is used to detect the distance between the sensor and the blade. The sensor is placed at the top of the blade's path and measures the distance to the blade as it passes by accessing the periodic nature of the back and forth motion of teh microtome. The speed is calculated based on the time taken for the blade to travel between these two points.
+
 
 ### Changing motivational quotes
 The motivational quotes are stored in the `messages` array in the `microtome_counter.ino` file. You can change the quotes by modifying the strings in this array. These messages are displayed after achieving a random amount of passes by the blade.  
