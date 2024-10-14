@@ -276,7 +276,7 @@ void loop() {
     bladeClose = true;
     minDistance = distance; // Reset min distance for this cycle
     startTime = millis(); // Record start time
-  } else if (distance >= 16 && bladeClose) { // Blade moves far, end tracking
+  } else if (distance >= 15.5 && bladeClose) { // Blade moves far, end tracking
     bladeClose = false;
     bladeFar = true;
     maxDistance = distance; // Record the maximum distance the blade moved away
@@ -357,5 +357,5 @@ void loop() {
     }
   }
 
-  delay(25); // Wait for 100 milliseconds before the next loop
+  delay(10); // Wait for 100 milliseconds before the next loop
 }
