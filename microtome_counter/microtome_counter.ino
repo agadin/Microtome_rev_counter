@@ -250,11 +250,11 @@ void loop() {
   }
 
   // Check if the blade is close (within 15 cm) and detect when it moves away (above 20 cm)
-  if (distance <= 15 && !bladeClose) { // Blade is close, start tracking
+  if (distance <= 10 && !bladeClose) { // Blade is close, start tracking
     bladeClose = true;
     minDistance = distance; // Reset min distance for this cycle
     startTime = millis(); // Record start time
-  } else if (distance >= 20 && bladeClose) { // Blade moves far, end tracking
+  } else if (distance >= 25 && bladeClose) { // Blade moves far, end tracking
     bladeClose = false;
     bladeFar = true;
     maxDistance = distance; // Record the maximum distance the blade moved away
