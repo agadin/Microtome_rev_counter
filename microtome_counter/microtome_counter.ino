@@ -250,7 +250,7 @@ void loop() {
   duration = pulseIn(echoPin, HIGH); // Read the echo pin and get the duration of the pulse
   distance = duration * 0.034 / 2; // Calculate the distance in cm
   // scale distance down by 0.9600 to account for the difference in the sensor's distance reading
-    distance = distance * 0.9600;
+    distance = distance * 0.9800;
 
   distanceBuffer[distanceBufferIndex] = distance;
   distanceBufferIndex = (distanceBufferIndex + 1) % distanceBufferSize; // Move to next index, wrap around if necessary
