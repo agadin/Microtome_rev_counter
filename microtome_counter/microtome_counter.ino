@@ -22,7 +22,7 @@ float speed; // Speed of the blade
 float totalDistance = 0; // Total distance traveled by the blade
 
 // Moving average variables
-const int bufferSize = 10; // Size of the buffer for moving average
+const int bufferSize = 5; // Size of the buffer for moving average
 float speedBuffer[bufferSize]; // Buffer to store recent speed measurements
 int bufferIndex = 0; // Current index in the buffer
 float movingAverageSpeed = 0; // Moving average of the speed
@@ -357,5 +357,5 @@ void loop() {
     }
   }
 
-  delay(50); // Wait for 100 milliseconds before the next loop
+  delay(25); // Wait for 100 milliseconds before the next loop
 }
