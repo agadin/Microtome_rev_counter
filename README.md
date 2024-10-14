@@ -68,6 +68,13 @@ Note: The buttons are optional and can be used to reset the pass count and total
 # Usage
 To use this project, connect the hardware as shown in the circuit diagram section above. Upload the code to the ESP32 Wroom by using the Arduino IDE (or another of your choice) and open the serial monitor to view the results. The LCD screen will also display the results.
 
+### Buttons
+* **Button 1:** Resets the pass count and total distance.
+* **Button 2:** Enters celebration mode and displays a congratulatory message.
+
+### Optional CAD files
+* The `microtome_counter.stl` file contains a 3D model of the microtome counter. This model can be 3D printed and used to mount the LCD and other components to the microtome.
+* 
 ### Additional Information
 * The ultrasonic sensor is used to detect the distance between the sensor and the blade. The sensor is placed at the top of the blade's path and measures the distance to the blade as it passes by accessing the periodic nature of the back and forth motion of teh microtome. The speed is calculated based on the time taken for the blade to travel between these two points.
 
