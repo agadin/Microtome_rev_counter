@@ -200,6 +200,11 @@ void setup() {
   }
 }
 
+const int debounceDelay = 50; // Debounce delay in milliseconds
+unsigned long lastDebounceTime = 0; // Last time the button state changed
+int lastButtonState = HIGH; // Previous state of the button
+
+
 void loop() {
     int reading = digitalRead(resetButtonPin);
 
