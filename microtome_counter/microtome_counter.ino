@@ -175,6 +175,11 @@ String repeatChar(char c, int count) {
   return result;
 }
 
+const int distanceBufferSize = 10; // Number of recent distance values to include in the rolling average
+float distanceBuffer[distanceBufferSize]; // Buffer to store recent distances
+int distanceBufferIndex = 0; // Index for circular buffer
+float rollingAverageDistance = 0; // Rolling average distance
+
 void setup() {
   // Initialize serial communication
   Serial.begin(9600);
@@ -198,11 +203,16 @@ void setup() {
   for (int i = 0; i < bufferSize; i++) {
     speedBuffer[i] = 0;
   }
+  for (int i = 0; i < distanceBufferSize; i++) {
+    distanceBuffer[i] = 0;
+  }
 }
 
 const int debounceDelay = 50; // Debounce delay in milliseconds
 unsigned long lastDebounceTime = 0; // Last time the button state changed
 int lastButtonState = HIGH; // Previous state of the button
+
+
 
 
 void loop() {
@@ -241,6 +251,18 @@ void loop() {
   distance = duration * 0.034 / 2; // Calculate the distance in cm
   // scale distance down by 0.9600 to account for the difference in the sensor's distance reading
     distance = distance * 0.9600;
+
+  distanceBuffer[distanceBufferIndex] = distance;
+  distanceBufferIndex = (distanceBufferIndex + 1) % distanceBufferSize; // Move to next index, wrap around if necessary
+
+  // Calculate the rolling average distance
+  float distanceSum = 0;
+  for (int i = 0; i < distanceBufferSize; i++) {
+    distanceSum += distanceBuffer[i];
+  }
+  distance = distanceSum / distanceBufferSize;
+
+
   // Track local minimum (closest) and maximum (farthest) distance in a cycle
   if (distance < minDistance) {
     minDistance = distance; // Update minimum if current distance is closer
@@ -250,11 +272,11 @@ void loop() {
   }
 
   // Check if the blade is close (within 15 cm) and detect when it moves away (above 20 cm)
-  if (distance <= 10 && !bladeClose) { // Blade is close, start tracking
+  if (distance <= 11 && !bladeClose) { // Blade is close, start tracking
     bladeClose = true;
     minDistance = distance; // Reset min distance for this cycle
     startTime = millis(); // Record start time
-  } else if (distance >= 25 && bladeClose) { // Blade moves far, end tracking
+  } else if (distance >= 16 && bladeClose) { // Blade moves far, end tracking
     bladeClose = false;
     bladeFar = true;
     maxDistance = distance; // Record the maximum distance the blade moved away
@@ -335,5 +357,5 @@ void loop() {
     }
   }
 
-  delay(100); // Wait for 100 milliseconds before the next loop
+  delay(50); // Wait for 100 milliseconds before the next loop
 }
