@@ -66,6 +66,15 @@ Note: The buttons are optional and can be used to reset the pass count and total
 6. Upload the code to the ESP32 by clicking the upload button in the Arduino IDE
 7. Open the serial monitor to view the results and ensure the LCD screen is displaying the results as well.
 
+## Sensor placement 
+The ultrasonic sensor should be placed at the top of the blade's path. Since the ultrasonic sensor has a viewing angle of around 15°, placing the sensor in a narrow channel can hinder the sensor's ability to sense further away distances. For example, if the sensor is placed in a 6.2cm by 2.5cm trench, the sensor struggles to read distances greater than 16cm (found experimentally). See the [Optional CAD files](#Optional-CAD-Files) for an included 3D model that can be used to mount the sensor to the microtome. If the sensor mount in `microtome_counter.step`is not ideal, `alt_sensor_holder.step` is also included for a different mounting option.
+
+### Optional CAD Files
+* The `microtome_counter.step` file contains a 3D model of the microtome counter. This model can be 3D printed and used to mount the LCD and other components to the microtome.
+![3D Model](https://raw.githubusercontent.com/agadin/Microtome_rev_counter/refs/heads/main/img/holder_counter1.gif)
+* `alt_sensor_holder.step` is an alternative sensor holder that can be used to mount the ultrasonic sensor to the microtome. This model can be 3D printed and used to mount the sensor to the microtome.
+
+
 # Usage
 To use this project, connect the hardware as shown in the circuit diagram section above. Upload the code to the ESP32 Wroom by using the Arduino IDE (or another of your choice) and open the serial monitor to view the results. The LCD screen will also display the results.
 
@@ -73,11 +82,8 @@ To use this project, connect the hardware as shown in the circuit diagram sectio
 
 ### Buttons
 * **Button 1:** Resets the pass count and total distance.
-* **Button 2:** Enters celebration mode and displays a congratulatory message.
+* **Button 2:** Unconfigured at the moment. Can be used to switch user profiles if that gets inplemented.
 
-### Optional CAD files
-* The `microtome_counter.step` file contains a 3D model of the microtome counter. This model can be 3D printed and used to mount the LCD and other components to the microtome.
-![3D Model](https://raw.githubusercontent.com/agadin/Microtome_rev_counter/refs/heads/main/img/holder_counter1.gif)
 
 ### Additional Information
 * The ultrasonic sensor is used to detect the distance between the sensor and the blade. The sensor is placed at the top of the blade's path and measures the distance to the blade as it passes by accessing the periodic nature of the back and forth motion of teh microtome. The speed is calculated based on the time taken for the blade to travel between these two points.
@@ -85,6 +91,19 @@ To use this project, connect the hardware as shown in the circuit diagram sectio
 
 ### Changing motivational quotes
 The motivational quotes are stored in the `messages` array in the `microtome_counter.ino` file. You can change the quotes by modifying the strings in this array. These messages are displayed after achieving a random amount of passes by the blade.  
+
+### Future Improvements
+* **User Profiles:** Allow users to switch between profiles to track multiple users' progress.
+* **Bluetooth Connectivity:** Connect the ESP32 to a smartphone to track progress and view results remotely.
+* **Data Logging:** Log the results to an SD card or cloud service for long-term tracking.
+* **Web Interface:** Create a web interface to view the results and track progress.
+* **Machine Learning:** Use machine learning to predict the speed and distance based on the blade's motion.
+* **Customizable Settings:** Allow users to customize the units for speed/distance and distance thresholds for pass detection.
+* **Improved Sensor Mount:** Design a more finalized sensor mount with back covers for the wires and a more secure attachment to the microtome.
+* **Improved LCD Display:** Add more information to the LCD display, such as the time of day.
+* **Improved Button Functionality:** Add more functionality to the buttons, such as entering different modes or settings.
+* **Improved Celebration Mode:** Add more animations and sounds to the celebration mode.
+
 
 # Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
